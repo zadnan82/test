@@ -1,0 +1,21 @@
+{
+  "id": 1,
+  "name": "Planning App",
+  "description": "A comprehensive task and project planning application with database integration",
+  "project_type": "web_app",
+  "category": "productivity",
+  "is_featured": true,
+  "is_public": true,
+  "usage_count": 0,
+  "preview_image_url": "https://example.com/preview/planning_app.png",
+  "rating": 4.5,
+  "tags": ["planning", "tasks", "projects", "productivity"],
+  "config": {
+    "database": "sqlite",
+    "frontend_framework": "vanilla_js",
+    "backend_framework": "node_express"
+  },
+  "tokens": ["planning", "tasks", "projects", "productivity"],
+  "created_at": "2024-01-01T00:00:00",
+  "updated_at": "2024-01-01T00:00:00"
+}

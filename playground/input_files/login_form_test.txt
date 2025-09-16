@@ -1,0 +1,3 @@
+lf{emailLabel=Email, passwordLabel=Password, buttonText=Sign In, forgotText=Forgot?, signInPath=/api/echo, signInMethod=POST}
+
+

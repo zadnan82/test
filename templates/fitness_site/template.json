@@ -1,0 +1,93 @@
+{
+    "name": "Fitness Site Template",
+    "description": "Complete fitness/gym website template with classes, trainers, memberships, and workout programs, built using SEVDO frontend compiler",
+    "version": "1.0.0",
+    "category": "fitness",
+    "author": "SEVDO Team",
+    "tags": ["fitness", "gym", "health", "training", "wellness", "classes"],
+    
+    "structure": {
+      "backend": {
+        "description": "FastAPI backend with PostgreSQL database for membership and class management",
+        "files": [
+          "auth.py",
+          "fitness_models.py"
+        ],
+        "features": [
+          "User authentication",
+          "Membership management",
+          "Class scheduling and booking",
+          "Trainer profiles and availability",
+          "Workout program tracking",
+          "Payment processing integration",
+          "Member check-in system"
+        ]
+      },
+      "frontend": {
+        "description": "SEVDO-compiled fitness pages",
+        "files": [
+          "Home.s",
+          "Classes.s",
+          "Trainers.s", 
+          "Memberships.s",
+          "Programs.s",
+          "About.s",
+          "Contact.s"
+        ],
+        "pages": {
+          "Home.s": "Homepage with hero section, featured classes, trainer highlights, and membership CTA",
+          "Classes.s": "Class schedule, descriptions, difficulty levels, and booking system",
+          "Trainers.s": "Trainer profiles, specializations, certifications, and booking",
+          "Memberships.s": "Membership tiers, pricing, benefits, and signup forms",
+          "Programs.s": "Workout programs, challenges, and personalized training plans",
+          "About.s": "Gym story, facilities, equipment, and community values",
+          "Contact.s": "Location, hours, contact info, and trial class booking"
+        }
+      }
+    },
+    
+    "required_prefabs": [
+      "mn", "ho", "fc", "tc", "mc", "fl", "tt", "hrs", "cta", "cf", "h", "t", "b", "pc"
+    ],
+    
+    "customization": {
+      "gym_name": "PowerFit Gym",
+      "tagline": "Transform Your Body, Transform Your Life",
+      "address": "456 Fitness Ave, Downtown District, Los Angeles, CA 90210",
+      "phone": "(555) 987-6543",
+      "email": "info@powerfitgym.com",
+      "established_year": "2015",
+      "head_trainer": "Sarah Johnson",
+      "specialties": ["Strength Training", "CrossFit", "Yoga", "HIIT", "Personal Training"],
+      "social_media": {
+        "instagram": "@powerfitgym",
+        "facebook": "PowerFit Gym LA",
+        "youtube": "PowerFit Workouts"
+      },
+      "operating_hours": {
+        "weekdays": "5:00 AM - 11:00 PM",
+        "saturday": "6:00 AM - 10:00 PM", 
+        "sunday": "7:00 AM - 9:00 PM"
+      }
+    },
+    
+    "features": [
+      "Responsive design optimized for mobile fitness tracking",
+      "Class booking and scheduling system",
+      "Trainer profile management with availability",
+      "Membership tier comparison and signup",
+      "Workout program library with progress tracking",
+      "Member testimonials and success stories",
+      "Equipment and facility showcasing",
+      "Trial class and consultation booking",
+      "Operating hours with real-time status",
+      "Social media integration for community",
+      "SEO-friendly structure for local fitness searches"
+    ],
+    
+    "installation": {
+      "backend": "Copy auth.py and fitness_models.py, configure database and payment gateway",
+      "frontend": "Compile .s files using SEVDO frontend compiler",
+      "customization": "Edit template.json values and gym-specific details"
+    }
+  }

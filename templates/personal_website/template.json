@@ -1,0 +1,72 @@
+{
+  "name": "Personal Website Template",
+  "description": "A modern personal website template with portfolio and blog features, built using SEVDO frontend compiler",
+  "version": "1.0.0",
+  "category": "portfolio",
+  "author": "SEVDO Team",
+  "tags": ["portfolio", "personal", "website", "blog", "professional"],
+
+  "structure": {
+    "backend": {
+      "description": "FastAPI backend with PostgreSQL database and authentication",
+      "files": ["auth.py"],
+      "features": [
+        "User authentication",
+        "Database ORM with SQLAlchemy",
+        "PostgreSQL support",
+        "Password hashing",
+        "Session management"
+      ]
+    },
+    "frontend": {
+      "description": "SEVDO-compiled personal website pages",
+      "files": ["Home.s", "About.s", "Projects.s", "Contact.s"],
+      "pages": {
+        "Home.s": "Homepage with hero section, featured projects, and call-to-action",
+        "About.s": "About page with personal story, journey, and skills",
+        "Projects.s": "Portfolio showcase with project descriptions and demos",
+        "Contact.s": "Contact information, form, and social media links"
+      }
+    }
+  },
+
+  "required_prefabs": ["ho", "h", "t", "b", "mn", "cf", "cta"],
+
+  "customization": {
+    "site_title": "Your Personal Website",
+    "owner_name": "John Doe",
+    "owner_email": "john.doe@example.com",
+    "tagline": "Full-stack developer passionate about creating amazing web applications",
+    "social_links": {
+      "linkedin": "/in/yourprofile",
+      "github": "yourgithub",
+      "twitter": "@yourhandle"
+    },
+    "location": "San Francisco, CA",
+    "skills": [
+      "Web Development",
+      "UI/UX Design",
+      "API Development",
+      "Database Design"
+    ]
+  },
+
+  "features": [
+    "Responsive personal website design",
+    "Portfolio project showcasing",
+    "Professional about page",
+    "Contact form with validation",
+    "Social media integration",
+    "Modern UI with clean aesthetics",
+    "SEO-friendly structure",
+    "Mobile-optimized design",
+    "Fast loading performance",
+    "Easy customization"
+  ],
+
+  "installation": {
+    "backend": "Copy auth.py and configure database credentials in environment variables",
+    "frontend": "Compile .s files using SEVDO frontend compiler with required prefabs",
+    "customization": "Edit template.json customization values and recompile frontend"
+  }
+}

@@ -1,0 +1,79 @@
+{
+    "name": "Restaurant Site Template",
+    "description": "Complete restaurant website template with menu, reservations, and contact pages, built using SEVDO frontend compiler",
+    "version": "1.0.0",
+    "category": "restaurant",
+    "author": "SEVDO Team",
+    "tags": ["restaurant", "dining", "menu", "reservations", "food-service"],
+    
+    "structure": {
+      "backend": {
+        "description": "FastAPI backend with PostgreSQL database for reservations and menu management",
+        "files": [
+          "auth.py",
+          "restaurant_models.py",
+          "README.md"
+        ],
+        "features": [
+          "User authentication",
+          "Reservation management",
+          "Menu item storage",
+          "Contact form handling",
+          "Operating hours management"
+        ]
+      },
+      "frontend": {
+        "description": "SEVDO-compiled restaurant pages",
+        "files": [
+          "Home.s",
+          "Menu.s",
+          "About.s", 
+          "Reservations.s",
+          "Contact.s"
+        ],
+        "pages": {
+          "Home.s": "Homepage with hero, featured dishes, testimonials, and hours",
+          "Menu.s": "Complete menu organized by categories with pricing",
+          "About.s": "Restaurant story, chef information, and values",
+          "Reservations.s": "Booking form, policies, and private event information",
+          "Contact.s": "Contact details, directions, services, and social media"
+        }
+      }
+    },
+    
+    "required_prefabs": [
+      "mn", "ho", "mic", "mc", "fl", "tt", "hrs", "cta", "cf", "h", "t", "b"
+    ],
+    
+    "customization": {
+      "restaurant_name": "Bella Vista Ristorante",
+      "cuisine_type": "Italian",
+      "address": "123 Via Roma Street, Little Italy District, San Francisco, CA 94133",
+      "phone": "(555) 123-4567",
+      "email": "info@bellavista-sf.com",
+      "chef_name": "Chef Marco",
+      "established_year": "1985",
+      "social_media": {
+        "instagram": "@bellavistaristorante",
+        "facebook": "Bella Vista Ristorante SF"
+      }
+    },
+    
+    "features": [
+      "Responsive design optimized for mobile dining customers",
+      "Menu management with categories and dietary indicators",
+      "Reservation booking system",
+      "Operating hours display with current status",
+      "Featured dish showcasing",
+      "Customer testimonials",
+      "Private event information",
+      "Contact forms and restaurant information",
+      "SEO-friendly structure for local search"
+    ],
+    
+    "installation": {
+      "backend": "Copy auth.py and restaurant_models.py, configure database",
+      "frontend": "Compile .s files using SEVDO frontend compiler",
+      "customization": "Edit template.json values and restaurant details"
+    }
+  }

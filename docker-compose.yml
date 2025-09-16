@@ -1,0 +1,235 @@
+# SEVDO Platform - Docker Compose with React Frontend
+# Focus on core services to get Docker working
+
+# Simple network for service communication
+networks:
+  sevdo-network:
+    driver: bridge
+
+# Persistent volumes for data
+volumes:
+  postgres_data:
+  redis_data:
+  sevdo_logs:
+  sevdo_tasks: 
+  playground_data:  # NEW: Added for playground
+ 
+
+services:
+  # PostgreSQL Database with pgvector
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: sevdo-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sevdo_db}
+      POSTGRES_USER: ${POSTGRES_USER:-sevdo_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/init_rag.sql:/docker-entrypoint-initdb.d/init_rag.sql
+    networks:
+      - sevdo-network
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sevdo_user} -d ${POSTGRES_DB:-sevdo_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Caching
+  redis:
+    image: redis:7-alpine
+    container_name: sevdo-redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - sevdo-network
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # React Frontend - Development
+  user-frontend:
+    build:
+      context: ./user_frontend
+      dockerfile: Dockerfile.dev
+    container_name: user-frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_DASHBOARD_URL=http://localhost:5000
+      - VITE_BACKEND_URL=http://localhost:8001
+    volumes:
+      - ./user_frontend:/app
+      - /app/node_modules
+    networks:
+      - sevdo-network
+    ports:
+      - "5173:5173"
+    depends_on:
+      - user-backend
+
+  # NEW: SEVDO Backend Compiler Service
+  sevdo-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sevdo-backend
+    command: ["python", "-m", "uvicorn", "sevdo_backend.backend_compiler:app", "--host", "0.0.0.0", "--port", "8001"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development
+    volumes:
+      - sevdo_logs:/app/logs
+      - sevdo_tasks:/app/tasks
+    networks:
+      - sevdo-network
+    ports:
+      - "8001:8001"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # NEW: SEVDO Frontend Compiler Service
+  sevdo-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sevdo-frontend
+    command: ["python", "-m", "uvicorn", "sevdo_frontend.frontend_compiler:app", "--host", "0.0.0.0", "--port", "8002"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development
+    volumes:
+      - sevdo_logs:/app/logs
+      - sevdo_tasks:/app/tasks
+      - playground_data:/app/playground
+    networks:
+      - sevdo-network
+    ports:
+      - "8002:8002"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # NEW: Playground Development Server
+  playground:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sevdo-playground
+    command: ["python", "-m", "uvicorn", "playground.playground_server:app", "--host", "0.0.0.0", "--port", "8003"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development
+      - DB_URL=postgresql://${POSTGRES_USER:-sevdo_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-sevdo_db}
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - playground_data:/app/playground/data  # Persistent data
+      - ./playground:/app/playground          # Source code
+      - ./sevdo_frontend:/app/sevdo_frontend  # Frontend dependencies
+    networks:
+      - sevdo-network
+    ports:
+      - "8003:8003"
+    depends_on:
+      - sevdo-frontend
+      - redis
+      - postgres
+      - user-backend
+       
+  user-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user-backend
+    command: ["python", "-m", "uvicorn", "user_backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development 
+      - DB_URL=postgresql://${POSTGRES_USER:-sevdo_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-sevdo_db}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-your-key-here}
+      - SEVDO_BACKEND_URL=http://sevdo-backend:8001
+      - SEVDO_FRONTEND_URL=http://sevdo-frontend:8002
+    volumes:
+      - sevdo_logs:/app/logs
+      - ./templates:/app/templates  # ADD THIS LINE
+    networks:
+      - sevdo-network
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      sevdo-backend:
+        condition: service_started
+      sevdo-frontend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      retries: 3
+
+  # Dashboard UI Service
+  sevdo-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sevdo-dashboard
+    command: ["python", "dashboard.py"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development
+      - SEVDO_TASK_DIR=/app/tasks
+      - SEVDO_OUTPUT_DIR=/app/logs
+      - SEVDO_FRONTEND_URL=http://sevdo-frontend:8002
+      - SEVDO_BACKEND_URL=http://sevdo-backend:8001
+      - LLM_GATEWAY_URL=http://192.168.16.103:8000
+    volumes:
+      - sevdo_logs:/app/logs
+      - sevdo_tasks:/app/tasks
+    networks:
+      - sevdo-network
+    ports:
+      - "5000:5000"
+    depends_on:
+      - user-backend
+      - sevdo-backend
+
+  # Task Runner for AI Processing
+  sevdo-task-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sevdo-task-runner
+    command: ["bash", "task-runner-aider.sh"]
+    environment:
+      - PYTHONPATH=/app
+      - SEVDO_ENV=development
+      - TASK_DIR=/app/tasks
+      - OUTPUT_DIR=/app/logs
+      - MODEL=${AIDER_MODEL:-llama3.2:3b}
+      - MODEL_TYPE=remote
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-your-key-here}
+    volumes:
+      - sevdo_logs:/app/logs
+      - sevdo_tasks:/app/tasks
+    networks:
+      - sevdo-network
+    # Allow container to reach host's Ollama server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - sevdo-dashboard
+      - postgres
+      - redis

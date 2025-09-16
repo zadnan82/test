@@ -1,0 +1,6 @@
+h(Built-in Components Test)
+t(This tests all built-in components)
+c(class=gap-6 p-6)
+b(Click Me){action=alert:Button clicked!}
+i(Enter text here, label=Text Input)
+sel(Option 1,Option 2,Option 3)

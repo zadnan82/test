@@ -1,0 +1,9 @@
+# Minimal RAG Dependencies - Only core packages needed
+# For users who want RAG functionality with smallest footprint
+# Usage: pip install -r requirements-rag-minimal.txt
+
+# Core sentence transformers (includes torch automatically)
+sentence-transformers>=2.2.0,<3.0.0
+
+# Optional: Scientific computing if needed
+numpy>=1.21.0

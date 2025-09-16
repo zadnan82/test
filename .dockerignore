@@ -1,0 +1,129 @@
+# Git and version control
+.git
+.gitignore
+.github
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+docs/
+*.md
+
+# Virtual environments
+venv/
+.venv/
+.env
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+tests/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and temporary files
+logs/
+*.log
+tmp/
+temp/
+
+# SEVDO specific
+tasks/
+outputs/
+.aider.*
+=*
+
+# Large model files
+*.model
+*.bin
+models/
+
+
+# Node modules
+**/node_modules/
+**/dist/
+**/build/
+
+# Python cache
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+*.so
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+target/
+*.egg-info/
+
+# Testing
+.coverage
+.pytest_cache/
+
+# Documentation
+docs/
+README.md
+
+templates/planning_app/node_modules/

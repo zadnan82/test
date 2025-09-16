@@ -1,0 +1,14 @@
+# Planning app client
+let apiBase = '/api'
+
+# Auth
+P /api/login → login()
+P /api/register → register()
+D /api/logout → logout()
+G /api/me → db.users[id] ? 401
+
+# Data
+G /api/projects → db.projects[id]
+G /api/issues → db.issues[id]
+P /api/issues → createIssue()
+G /api/sprints → db.sprints[id]

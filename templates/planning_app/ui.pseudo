@@ -1,0 +1,11 @@
+# UI for planning app
+THEME minimal accent(#2563eb)
+BRAND name('Planboard')
+NAV links('/', '/projects', '/issues', '/sprints')
+SEO title('Planboard — Plan and Track') desc('Projects, issues, sprints')
+AUTH login(name, password) register(name, password)
+
+PAGE / → hero('Planboard', 'Plan. Track. Deliver.') + grid(posts) + footer
+PAGE /projects → hero('Projects', 'All projects') + footer
+PAGE /issues → hero('Issues', 'All tasks') + footer
+PAGE /sprints → hero('Sprints', 'Calendar view') + footer

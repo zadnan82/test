@@ -1,0 +1,24 @@
+# Development Dockerfile for React/Vite with hot reload
+
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Set environment variable to disable browser auto-open
+ENV BROWSER=none
+
+# Expose port 5173 (Vite dev server default)
+EXPOSE 5173
+
+# Start development server with hot reload
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]

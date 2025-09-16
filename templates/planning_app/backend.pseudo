@@ -1,0 +1,27 @@
+# Planning app backend (Jira-like)
+# Auth
+P /api/login → login()
+P /api/register → register()
+D /api/logout !auth → logout()
+G /api/me !auth → db.users[id] ? 401
+
+# Projects and boards
+G /api/projects !auth → listProjects()
+P /api/projects !auth → createProject()
+G /api/projects/:id !auth → db.projects[id] ? 404
+
+# Issues (tasks)
+G /api/issues !auth → listIssues()
+P /api/issues !auth → createIssue()
+G /api/issues/:id !auth → db.issues[id] ? 404
+U /api/issues/:id !auth → updateIssue()
+
+# Sprints (calendars)
+G /api/sprints !auth → listSprints()
+P /api/sprints !auth → createSprint()
+G /api/sprints/:id !auth → db.sprints[id] ? 404
+U /api/sprints/:id !auth → updateSprint()
+
+# Comments
+G /api/issues/:id/comments !auth → listComments()
+P /api/issues/:id/comments !auth → addComment()

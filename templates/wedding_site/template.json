@@ -1,0 +1,86 @@
+{
+    "name": "Wedding & Event Planning Site Template",
+    "description": "Complete wedding and event planning website template with services, gallery, packages, and booking system, built using SEVDO frontend compiler",
+    "version": "1.0.0",
+    "category": "wedding",
+    "author": "SEVDO Team",
+    "tags": ["wedding", "event-planning", "bridal", "celebration", "romantic"],
+    
+    "structure": {
+      "backend": {
+        "description": "FastAPI backend with PostgreSQL database for event management and bookings",
+        "files": [
+          "auth.py",
+          "wedding_models.py"
+        ],
+        "features": [
+          "User authentication",
+          "Event booking and management",
+          "Package pricing and customization",
+          "Gallery management with before/after photos",
+          "Vendor coordination system",
+          "Payment processing integration",
+          "Client communication portal"
+        ]
+      },
+      "frontend": {
+        "description": "SEVDO-compiled wedding planning pages",
+        "files": [
+          "Hem.s",
+          "Tjanster.s",
+          "Galleri.s", 
+          "Paket.s",
+          "Kontakt.s"
+        ],
+        "pages": {
+          "Hem.s": "Romantic homepage with hero section, testimonials from couples, and featured services",
+          "Tjanster.s": "Complete wedding services including planning, coordination, decoration, and vendor management",
+          "Galleri.s": "Beautiful before/after wedding galleries showcasing transformations and past events",
+          "Paket.s": "Wedding packages with detailed pricing, inclusions, and customization options",
+          "Kontakt.s": "Contact information, consultation booking, and venue location details"
+        }
+      }
+    },
+    
+    "required_prefabs": [
+      "mn", "ho", "fl", "tt", "pt", "gl", "wp", "cta", "cf", "h", "t", "b"
+    ],
+    
+    "customization": {
+      "business_name": "Drömbröllopet",
+      "tagline": "Gör din drömdag till verklighet",
+      "address": "Storgatan 15, 111 51 Stockholm, Sverige",
+      "phone": "+46 8 123 456 78",
+      "email": "info@drombröllopet.se",
+      "established_year": "2018",
+      "lead_planner": "Emma Andersson",
+      "specialties": ["Romantiska bröllop", "Destination weddings", "Vintage stil", "Moderna ceremonier"],
+      "social_media": {
+        "instagram": "@drombröllopet",
+        "facebook": "Drömbröllopet Wedding Planning",
+        "pinterest": "Drömbröllopet Inspiration"
+      },
+      "languages": ["Svenska", "English", "Français"],
+      "service_areas": ["Stockholm", "Göteborg", "Malmö", "Uppsala"]
+    },
+    
+    "features": [
+      "Romantic and elegant design optimized for couples",
+      "Wedding package comparison and customization",
+      "Before/after gallery showcasing transformations",
+      "Service portfolio with detailed descriptions",
+      "Client testimonials and love stories",
+      "Consultation booking system",
+      "Vendor coordination tools",
+      "Multi-language support (Swedish/English)",
+      "Mobile-optimized for planning on-the-go",
+      "SEO-friendly for local wedding searches",
+      "Social media integration for inspiration sharing"
+    ],
+    
+    "installation": {
+      "backend": "Copy auth.py and wedding_models.py, configure database and payment gateway",
+      "frontend": "Compile .s files using SEVDO frontend compiler",
+      "customization": "Edit template.json values and wedding business details"
+    }
+  }

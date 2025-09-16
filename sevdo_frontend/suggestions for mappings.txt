@@ -1,0 +1,15 @@
+b	Button	b	<Button>Click</Button>
+	Button med text	b(Login)	<Button>Login</Button>
+	Button med funktion	b(Login){onClick=submit}	<Button onClick={submit}>Login</Button>
+h	Header	h	<h1>Header</h1>
+	Med text	h(Welcome)	<h1>Welcome</h1>
+i	Inputfält	i(email)	<Input placeholder="email" />
+	Med label	i(email,label=Email)	<Input label="Email" placeholder="email" />
+c	Container/Grid	c	<div className="flex flex-col gap-4"></div>
+	Med props	c{class=grid-cols-2}	<div className="grid grid-cols-2 gap-4"></div>
+f	Form	f(i(email)i(pass)b(Login))	<form><Input /><Input /><Button>Login</Button></form>
+n	Navbar	n(Home,About,Contact)	<Navbar links={["Home","About","Contact"]} />
+img	Bild	img(src=logo.png)	<img src="logo.png" alt="logo" />
+t	Text	t(Hello)	<p>Hello</p>
+sel	Select/Dropdown	sel(one,two,three)	<Select options={["one","two","three"]} />
+m	Modal	m(Login)	<Modal title="Login"

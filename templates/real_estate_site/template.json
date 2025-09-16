@@ -1,0 +1,87 @@
+{
+    "name": "Real Estate Agent Site Template",
+    "description": "Complete Swedish real estate agent website template with property listings, valuations, and sales statistics, built using SEVDO frontend compiler",
+    "version": "1.0.0",
+    "category": "real_estate",
+    "author": "SEVDO Team",
+    "tags": ["fastighetsmäklare", "real-estate", "property", "valuation", "swedish"],
+    
+    "structure": {
+      "backend": {
+        "description": "FastAPI backend with PostgreSQL database for property and client management",
+        "files": [
+          "auth.py",
+          "real_estate_models.py"
+        ],
+        "features": [
+          "User authentication",
+          "Property listing management",
+          "Valuation request handling",
+          "Client relationship management",
+          "Sales statistics tracking",
+          "Market analysis tools",
+          "Document management system"
+        ]
+      },
+      "frontend": {
+        "description": "SEVDO-compiled real estate pages",
+        "files": [
+          "Hem.s",
+          "TillSalu.s",
+          "Vardering.s", 
+          "OmOss.s",
+          "Kontakt.s"
+        ],
+        "pages": {
+          "Hem.s": "Homepage with hero section, sales statistics, featured properties, and market insights",
+          "TillSalu.s": "Property listings with search filters, detailed property cards, and interactive map",
+          "Vardering.s": "Property valuation request form with market analysis and consultation booking",
+          "OmOss.s": "About us page with agent profiles, company history, and market expertise",
+          "Kontakt.s": "Contact information, office locations, and inquiry forms"
+        }
+      }
+    },
+    
+    "required_prefabs": [
+      "mn", "ho", "pl", "st", "cf", "fl", "tt", "cta", "h", "t", "b"
+    ],
+    
+    "customization": {
+      "agency_name": "Stockholms Fastighetsmäklare",
+      "tagline": "Din lokala expertis för drömhemmet",
+      "address": "Kungsgatan 42, 111 35 Stockholm, Sverige",
+      "phone": "+46 8 555 123 45",
+      "email": "info@stockholmsfastighet.se",
+      "established_year": "1995",
+      "lead_agent": "Anna Svensson",
+      "specialties": ["Bostadsrätter", "Villor", "Kommersiella fastigheter", "Nyproduktion"],
+      "service_areas": ["Stockholm City", "Södermalm", "Östermalm", "Vasastan", "Gamla Stan"],
+      "social_media": {
+        "instagram": "@stockholmsfastighet",
+        "facebook": "Stockholms Fastighetsmäklare",
+        "linkedin": "Stockholms Fastighetsmäklare AB"
+      },
+      "licenses": ["Fastighetsmäklarförbundet", "Svensk Fastighetsförmedling"],
+      "languages": ["Svenska", "English", "Español"]
+    },
+    
+    "features": [
+      "Professional Swedish real estate design",
+      "Advanced property search and filtering",
+      "Interactive property listings with image galleries",
+      "Market statistics and sales data visualization",
+      "Property valuation request system",
+      "Agent profiles with expertise areas",
+      "Neighborhood guides and market insights",
+      "Mobile-optimized for property viewing on-the-go",
+      "SEO-friendly for local property searches",
+      "Integration with Swedish property databases",
+      "Multi-language support for international clients"
+    ],
+    
+    "installation": {
+      "backend": "Copy auth.py and real_estate_models.py, configure database and property APIs",
+      "frontend": "Compile .s files using SEVDO frontend compiler",
+      "customization": "Edit template.json values and agency-specific details"
+    }
+  }

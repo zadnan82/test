@@ -1,0 +1,5 @@
+rf{registerPath=/api/echo, registerMethod=POST, loginAction=alert:Go to login}
+
+lf{formClass=bg-white rounded-2xl shadow p-8, titleClass=text-2xl, containerClass=gap-6, inputClass=ring-2 ring-blue-200 focus:ring-blue-400, actionsClass=mt-6, signinClass=bg-indigo-600 text-lg px-6 py-3 rounded-xl shadow, forgotClass=bg-slate-500}
+
+rf{formClass=bg-emerald-50 rounded-xl p-8, titleClass=text-2xl text-emerald-800, inputClass=border-emerald-200 focus:ring-emerald-300, actionsClass=gap-3, registerClass=bg-emerald-600 px-6 py-3 rounded-lg, loginClass=bg-slate-600}

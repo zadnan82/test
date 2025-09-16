@@ -1,0 +1,17 @@
+{
+  "name": "planning-app",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build:backend": "PYTHONPATH=../.. ../../.venv/bin/python -m cli transpile backend backend.pseudo --prepend header.backend.js --out app.js",
+    "build:frontend": "PYTHONPATH=../.. ../../.venv/bin/python -m cli transpile frontend frontend.pseudo --out public/client.js",
+    "build:ui": "PYTHONPATH=../.. ../../.venv/bin/python -m cli site ui.pseudo --out public/index.html",
+    "build": "npm run build:backend && npm run build:frontend && npm run build:ui",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "better-sqlite3": "^9.6.0",
+    "bcryptjs": "^2.4.3"
+  }
+}

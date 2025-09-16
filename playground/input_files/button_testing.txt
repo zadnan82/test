@@ -1,0 +1,24 @@
+b(Show Alert){action=alert:Hello from button}
+b(Log Message){action=log:Logging from button}
+
+b(Open GitHub){action=open:https://github.com|_blank}
+b(Go Home){action=nav:/}
+
+b(Back){action=back:}
+b(Reload Page){action=reload:}
+
+b(Copy Text){action=copy:Copied via sevdoAct}
+b(Download Note){action=download:note.txt|This is a note}
+
+b(Scroll to Root){action=scroll:#root}
+b(Highlight Container){action=class:toggle .component-container|ring-2}
+
+b(Set Theme){action=store:set theme|dark}
+b(Get Theme){action=store:get theme}
+b(Remove Theme){action=store:remove theme}
+
+b(Ping API){action=api:/api/ping}
+b(Echo JSON){action=api:POST /api/echo|{"msg":"hello"}}
+
+b(Shorthand GET){action=/api/ping}
+b(Hello World Nav){action=nav:/hello_world/}

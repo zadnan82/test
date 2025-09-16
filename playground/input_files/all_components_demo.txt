@@ -1,0 +1,22 @@
+h(All Components Demo)
+t(This file demonstrates every available component and token in the frontend DSL)
+c(class=gap-6 p-6)
+b(Click Me){action=alert:Button clicked!}
+i(Enter text here, label=Text Input)
+sel(Option 1,Option 2,Option 3)
+img(https://via.placeholder.com/300x200?text=Sample+Image, alt=Sample Image)
+n(Home,About,Contact)
+ch{sendPath=/api/echo, sendMethod=POST}
+rf{registerPath=/api/echo, registerMethod=POST, loginAction=alert:Go to login}
+lf{formClass=bg-white rounded-2xl shadow p-8, titleClass=text-2xl, containerClass=gap-6, inputClass=ring-2 ring-blue-200 focus:ring-blue-400, actionsClass=mt-6, signinClass=bg-indigo-600 text-lg px-6 py-3 rounded-xl shadow, forgotClass=bg-slate-500}
+cf{submitPath=/api/echo, submitMethod=POST, submitAction=alert:Form submitted!}
+em{to=user@example.com, subject=Test Email, body=This is a test email}
+co{acceptAction=alert:Cookies accepted, declineAction=alert:Cookies declined}
+cd{title=Card Title, subtitle=Card Subtitle, content=This is the card content}
+ft{companyName=Company Name, year=2024}
+mn{items=Home,About,Contact, Services,Portfolio}
+pg{title=Page Title, description=Page description}
+qa{question=What is this?, answer=This is an answer}
+tt{name=John Doe, role=CEO, company=Tech Corp, testimonial=Amazing product!}
+f(class=gap-4)
+b(Form Submit){action=alert:Form submitted!}

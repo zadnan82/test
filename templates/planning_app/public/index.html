@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'/>
+    <meta name='viewport' content='width=device-width, initial-scale=1'/>
+    <title>Planboard — Plan and Track</title>
+    <meta name="description" content="Projects, issues, sprints"/>
+    
+    <script src='https://cdn.tailwindcss.com'></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { accent: '#2563eb' } } } };
+    </script>
+  </head>
+  <body class='bg-white text-gray-900'>
+    <div id='root'></div>
+    <script src='https://unpkg.com/react@18/umd/react.production.min.js'></script>
+    <script src='https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'></script>
+    <script src='/client.js'></script>
+    <script>
+      const e = React.createElement;
+      const RouterContext = React.createContext({ current: '/' });
+      // Attach auth token to all fetch calls
+      const _fetch = window.fetch.bind(window);
+      window.fetch = (url, opts = {}) => {
+        opts = opts || {};
+        opts.headers = opts.headers || {};
+        const t = localStorage.getItem('authToken');
+        if (t) opts.headers['X-Auth-Token'] = t;
+        return _fetch(url, opts);
+      };
+
+      function AuthControls() {
+        const [token, setToken] = React.useState(localStorage.getItem('authToken') || '');
+        const [fields, setFields] = React.useState({});
+        const [mode, setMode] = React.useState('login');
+        const login = async (ev) => {
+          ev.preventDefault();
+          try {
+            if (!window.client || !window.client.postApiLogin) throw new Error('no login');
+            const res = await window.client.postApiLogin(undefined, fields);
+            if (res && res.token) {
+              localStorage.setItem('authToken', res.token);
+              setToken(res.token);
+            }
+          } catch(e) { alert('Login failed'); }
+        };
+        const register = async (ev) => {
+          ev.preventDefault();
+          try {
+            if (!window.client || !window.client.postApiRegister) throw new Error('no register');
+            const res = await window.client.postApiRegister(undefined, fields);
+            if (res && res.token) {
+              localStorage.setItem('authToken', res.token);
+              setToken(res.token);
+            }
+          } catch(e) { alert('Register failed'); }
+        };
+        const logout = async () => {
+          try { if (window.client && window.client.deleteApiLogout) await window.client.deleteApiLogout(); } catch(e) {}
+          localStorage.removeItem('authToken');
+          setToken('');
+        };
+        if (token) return e('button', { className: 'text-sm', onClick: logout }, 'Logout');
+        const loginFields = ['name', 'password'];
+        const registerFields = ['name', 'password'];
+        const fieldsToUse = mode === 'login' ? loginFields : registerFields;
+        const onSubmit = mode === 'login' ? login : register;
+        return e('form', { onSubmit, className: 'flex items-center gap-2' },
+          ...fieldsToUse.map(fname => e('input', { key: fname, value: fields[fname] || '', onChange: (ev) => setFields({...fields, [fname]: ev.target.value}), placeholder: fname, type: fname.toLowerCase().includes('password') ? 'password' : 'text', className: 'border rounded px-2 py-1 text-sm' })),
+          e('button', { className: 'text-sm bg-accent text-white px-2 py-1 rounded' }, mode === 'login' ? 'Login' : 'Register'),
+          registerFields.length ? e('button', { type:'button', onClick: () => setMode(mode === 'login' ? 'register' : 'login'), className: 'text-sm underline' }, mode === 'login' ? 'Register' : 'Login') : null
+        );
+      }
+      function useHashRoute() {
+        const [path, setPath] = React.useState(window.location.hash.slice(1) || '/');
+        React.useEffect(() => {
+          const onHash = () => setPath(window.location.hash.slice(1) || '/');
+          window.addEventListener('hashchange', onHash);
+          return () => window.removeEventListener('hashchange', onHash);
+        }, []);
+        return [path, (p) => { window.location.hash = p; setPath(p); }];
+      }
+
+      function NavBar() {
+        const AVATAR = null;
+        return e('nav', { className: 'flex items-center justify-between py-4' },
+          e('div', { className: 'flex items-center gap-3' },
+            AVATAR ? e('img', { src: AVATAR, className: 'w-8 h-8 rounded-full hidden sm:block' }) : null,
+            e('span', { className: 'font-semibold' }, 'Planboard')
+          ),
+          e('div', { className: 'flex gap-4 text-sm' },
+            e('a', { href: '#/', className: 'hover:text-accent' }, '/'),e('a', { href: '#/projects', className: 'hover:text-accent' }, '/projects'),e('a', { href: '#/issues', className: 'hover:text-accent' }, '/issues'),e('a', { href: '#/sprints', className: 'hover:text-accent' }, '/sprints')
+          ),
+          e(AuthControls)
+        );
+      }
+
+      function Hero() {
+        return e('section', { className: 'py-16 text-center' },
+          e('h1', { className: 'text-4xl font-bold' }, 'Planboard'),
+          e('p', { className: 'text-gray-600 mt-2' }, 'Projects, issues, sprints')
+        );
+      }
+
+      function PostsGrid() {
+        const [items, setItems] = React.useState([]);
+        const [slug, setSlug] = React.useState('posts');
+        const token = typeof localStorage !== 'undefined' ? localStorage.getItem('authToken') : '';
+        React.useEffect(() => {
+          const order = ['getApiPosts','getApiIssues','getApiProjects','getApiSprints'];
+          let fn = null; let chosen = 'posts';
+          for (const name of order) {
+            const candidate = window.client && window.client[name];
+            if (typeof candidate === 'function') { fn = candidate; chosen = name.replace('getApi','').toLowerCase(); break; }
+          }
+          setSlug(chosen);
+          if (!fn) { setItems([]); return; }
+          fn().then(setItems).catch(()=>setItems([]));
+        }, [token]);
+        if (!token) return e('div', { className: 'p-4 border rounded bg-yellow-50 text-yellow-800' }, 'Please log in to see data');
+        return e('section', { className: 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3' },
+          ...items.map(p => e('a', { href: '#/' + slug + '/' + (p.id || ''), className: 'block p-4 border rounded-lg hover:shadow' },
+            e('h3', { className: 'font-semibold' }, p.title || p.name || p.id),
+            e('p', { className: 'text-sm text-gray-600' }, (p.content || p.status || p.start || '').slice ? (p.content || p.status || p.start || '').slice(0, 120) : '')
+          ))
+        );
+      }
+
+      function ProjectsGrid() {
+        const [items, setItems] = React.useState([]);
+        React.useEffect(() => {
+          const fn = window.client && window.client.getApiProjects;
+          if (!fn) return;
+          fn().then(setItems).catch(()=>setItems([]));
+        }, []);
+        return e('section', { className: 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3' },
+          ...items.map(p => e('div', { className: 'p-4 border rounded-lg' },
+            e('h3', { className: 'font-semibold' }, p.name || p.id)
+          ))
+        );
+      }
+
+      function IssuesBoard() {
+        const [issues, setIssues] = React.useState([]);
+        const [title, setTitle] = React.useState('');
+        const [status, setStatus] = React.useState('todo');
+        React.useEffect(() => {
+          const fn = window.client && window.client.getApiIssues;
+          if (!fn) return;
+          fn().then(setIssues).catch(()=>setIssues([]));
+        }, []);
+        async function addIssue(ev) {
+          ev.preventDefault();
+          const add = window.client && window.client.postApiIssues;
+          if (!add) return alert('Add not available');
+          try {
+            await add(undefined, { title, status });
+            setTitle('');
+            const refresh = window.client && window.client.getApiIssues;
+            if (refresh) setIssues(await refresh());
+          } catch(e) { alert('Failed to add'); }
+        }
+        const statuses = ['todo','doing','done'];
+        return e('div', { className: 'space-y-4' },
+          e('form', { onSubmit: addIssue, className: 'flex gap-2' },
+            e('input', { value: title, onChange: ev=>setTitle(ev.target.value), placeholder:'New issue title', className:'border rounded px-2 py-1' }),
+            e('select', { value: status, onChange: ev=>setStatus(ev.target.value), className:'border rounded px-2 py-1' },
+              ...statuses.map(s => e('option', { key:s, value:s }, s))
+            ),
+            e('button', { className:'px-3 py-1 bg-accent text-white rounded' }, 'Add')
+          ),
+          e('div', { className: 'grid gap-4 grid-cols-1 md:grid-cols-3' },
+          ...statuses.map(st => e('div', { className: 'bg-gray-50 rounded-lg p-3' },
+            e('h3', { className: 'text-sm font-semibold uppercase text-gray-600 mb-2' }, st),
+            ...issues.filter(i => (i.status || 'todo').toLowerCase() === st).map(i =>
+              e('div', { key: i.id, className: 'mb-2 p-3 rounded-md border bg-white' },
+                e('div', { className: 'font-medium' }, i.title || i.id),
+                e('div', { className: 'text-xs text-gray-500' }, (i.assignee || 'Unassigned'))
+              )
+            )
+          ))
+          )
+        );
+      }
+
+      function SprintsCalendar() {
+        const [sprints, setSprints] = React.useState([]);
+        React.useEffect(() => {
+          const fn = window.client && window.client.getApiSprints;
+          if (!fn) return;
+          fn().then(setSprints).catch(()=>setSprints([]));
+        }, []);
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const first = new Date(year, month, 1);
+        const startDay = first.getDay();
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+        const cells = [];
+        for (let i=0;i<startDay;i++) cells.push(null);
+        for (let d=1; d<=daysInMonth; d++) cells.push(new Date(year, month, d));
+        while (cells.length % 7 !== 0) cells.push(null);
+
+        function inSprint(date) {
+          if (!date) return null;
+          const ymd = date.toISOString().slice(0,10);
+          for (const s of sprints) {
+            const s0 = new Date((s.start||'').slice(0,10));
+            const s1 = new Date((s.end||'').slice(0,10));
+            if (s0.toString() !== 'Invalid Date' && s1.toString() !== 'Invalid Date') {
+              if (date >= s0 && date <= s1) return s;
+            }
+          }
+          return null;
+        }
+
+        return e('div', { className: 'border rounded-lg overflow-hidden' },
+          e('div', { className: 'grid grid-cols-7 bg-gray-100 text-xs font-semibold' },
+            ...['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => e('div', { className: 'p-2 text-center' }, d))
+          ),
+          e('div', { className: 'grid grid-cols-7' },
+            ...cells.map((date, idx) => {
+              const s = date && inSprint(date);
+              return e('div', { key: idx, className: 'h-24 border p-1 align-top' },
+                date ? e('div', { className: 'text-xs text-gray-600' }, String(date.getDate())) : null,
+                s ? e('div', { className: 'mt-1 text-[11px] px-1 rounded bg-accent text-white' }, s.name || s.id) : null
+              );
+            })
+          )
+        );
+      }
+
+      function Article({ id }) {
+        const [post, setPost] = React.useState(null);
+        React.useEffect(() => {
+          window.client.getApiPostsById({ id }).then(setPost).catch(()=>setPost(null));
+        }, [id]);
+        if (!post) return e('p', null, 'Not found');
+        return e('article', { className: 'prose max-w-none' },
+          e('h1', null, post.title),
+          e('p', null, post.content)
+        );
+      }
+
+      function ContactForm() {
+        const [status, setStatus] = React.useState('');
+        const onSubmit = async (ev) => {
+          ev.preventDefault();
+          const data = Object.fromEntries(new FormData(ev.currentTarget).entries());
+          try {
+            await window.client.postApiContact(undefined, data);
+            setStatus('Thanks!');
+            ev.currentTarget.reset();
+          } catch(e) { setStatus('Error'); }
+        };
+        const fields = ['name', 'message'];
+        return e('form', { onSubmit: onSubmit, className: 'space-y-2' },
+          ...fields.map((fname) => e('div', null,
+            e('label', {className:'block text-sm'}, fname.charAt(0).toUpperCase() + fname.slice(1)),
+            e(fname === 'message' ? 'textarea' : 'input', {name: fname, className:'w-full border rounded p-2'})
+          )),
+          e('button', { className: 'px-3 py-2 bg-accent text-white rounded' }, 'Send'),
+          status && e('p', { className: 'text-sm text-gray-600' }, status)
+        );
+      }
+
+      function Router() {
+        const [path] = useHashRoute();
+        const parts = path.split('/').filter(Boolean);
+        let view = null;
+        if (path === '/' || path === '') {
+          view = e(React.Fragment, null, e(Hero), e(PostsGrid), e('section', {className:'mt-8'}, e(ContactForm)));
+        } else if (parts[0] === 'posts' && parts[1]) {
+          view = e(Article, { id: parts[1] });
+        } else if (parts[0] === 'posts') {
+          view = e(PostsGrid);
+        } else if (parts[0] === 'projects') {
+          view = e(ProjectsGrid);
+        } else if (parts[0] === 'issues') {
+          view = e(IssuesBoard);
+        } else if (parts[0] === 'sprints') {
+          view = e(SprintsCalendar);
+        } else if (parts[0] === 'contact') {
+          view = e(ContactForm);
+        } else {
+          view = e('p', null, 'Not found');
+        }
+        return e('div', { className: 'max-w-4xl mx-auto px-4' }, e(NavBar), view);
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(e(Router));
+    </script>
+  </body>
+</html>

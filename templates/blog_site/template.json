@@ -1,0 +1,75 @@
+{
+    "name": "Blog Site Template",
+    "description": "Complete blog website template with multiple pages, built using SEVDO frontend compiler",
+    "version": "1.0.0",
+    "category": "blog",
+    "author": "SEVDO Team",
+    "tags": ["blog", "content", "articles", "personal", "professional"],
+    
+    "structure": {
+      "backend": {
+        "description": "FastAPI backend with PostgreSQL database and authentication",
+        "files": [
+          "auth.py"
+        ],
+        "features": [
+          "User authentication",
+          "Database ORM with SQLAlchemy", 
+          "PostgreSQL support",
+          "Password hashing",
+          "Session management"
+        ]
+      },
+      "frontend": {
+        "description": "SEVDO-compiled frontend pages",
+        "files": [
+          "Home.s",
+          "Blog.s", 
+          "Article.s",
+          "About.s",
+          "Contact.s"
+        ],
+        "pages": {
+          "Home.s": "Homepage with latest posts, hero section, and newsletter signup",
+          "Blog.s": "Complete article listing with search, filters, and pagination",
+          "Article.s": "Individual article page with sharing and related posts",
+          "About.s": "About the author/blog with personal story and testimonials",
+          "Contact.s": "Contact information, form, and FAQ section"
+        }
+      }
+    },
+    
+    "required_prefabs": [
+      "mn", "ho", "bl", "fl", "tt", "cta", "cf", "al", "h", "t", "b"
+    ],
+    
+    "customization": {
+      "blog_title": "DevInsights",
+      "author_name": "Alex",
+      "author_email": "alex@devinsights.com",
+      "social_links": {
+        "twitter": "@devinsights",
+        "linkedin": "/in/alex-developer"
+      },
+      "location": "San Francisco, CA"
+    },
+    
+    "features": [
+      "Responsive design",
+      "Blog post management",
+      "Search and filtering",
+      "Category organization", 
+      "Social sharing",
+      "Newsletter signup",
+      "Contact forms",
+      "Author bio sections",
+      "Related posts",
+      "SEO-friendly structure"
+    ],
+    
+    "installation": {
+      "backend": "Copy auth.py and configure database credentials",
+      "frontend": "Compile .s files using SEVDO frontend compiler",
+      "customization": "Edit template.json values and recompile"
+    }
+  }
